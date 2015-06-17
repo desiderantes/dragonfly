@@ -57,7 +57,7 @@ cls.SimpleJSParser.prototype = new function()
     * @param {String} script_source The script string.
     * @param {Function} ontoken. Signature of the callback is (token_type, token).
     * @param {String} escape. Optional. Currently supports only "html"
-    * to escape "<" and "&" to "&lt;" and "&amp;".
+    * to escape "<", ">" and "&" to "&lt;", "&gt;" (for ]]>) and "&amp;".
     */
   this.tokenize = function(script_source, ontoken, escape, start_state){};
 
@@ -355,7 +355,39 @@ cls.SimpleJSParser.prototype = new function()
   var ESCAPE =
   {
     '<': '&lt;',
-    '&': '&amp;'
+    '>': '&gt;',
+    '&': '&amp;',
+    // The following control characters need to be escaped in XML.
+    // U+0000-U+001F excluding U+0009, U+000A and U+000D.
+    '\u0000': '<span style="content: \'\\0000\'">␀</span>',
+    '\u0001': '<span style="content: \'\\0001\'">␁</span>',
+    '\u0002': '<span style="content: \'\\0002\'">␂</span>',
+    '\u0003': '<span style="content: \'\\0003\'">␃</span>',
+    '\u0004': '<span style="content: \'\\0004\'">␄</span>',
+    '\u0005': '<span style="content: \'\\0005\'">␅</span>',
+    '\u0006': '<span style="content: \'\\0006\'">␆</span>',
+    '\u0007': '<span style="content: \'\\0007\'">␇</span>',
+    '\u0008': '<span style="content: \'\\0008\'">␈</span>',
+    '\u000b': '<span style="content: \'\\000b\'">␋</span>',
+    '\u000c': '<span style="content: \'\\000c\'">␌</span>',
+    '\u000e': '<span style="content: \'\\000e\'">␎</span>',
+    '\u000f': '<span style="content: \'\\000f\'">␏</span>',
+    '\u0010': '<span style="content: \'\\0010\'">␐</span>',
+    '\u0011': '<span style="content: \'\\0011\'">␑</span>',
+    '\u0012': '<span style="content: \'\\0012\'">␒</span>',
+    '\u0013': '<span style="content: \'\\0013\'">␓</span>',
+    '\u0014': '<span style="content: \'\\0014\'">␔</span>',
+    '\u0015': '<span style="content: \'\\0015\'">␕</span>',
+    '\u0016': '<span style="content: \'\\0016\'">␖</span>',
+    '\u0017': '<span style="content: \'\\0017\'">␗</span>',
+    '\u0018': '<span style="content: \'\\0018\'">␘</span>',
+    '\u0019': '<span style="content: \'\\0019\'">␙</span>',
+    '\u001a': '<span style="content: \'\\001a\'">␚</span>',
+    '\u001b': '<span style="content: \'\\001b\'">␛</span>',
+    '\u001c': '<span style="content: \'\\001c\'">␜</span>',
+    '\u001d': '<span style="content: \'\\001d\'">␝</span>',
+    '\u001e': '<span style="content: \'\\001e\'">␞</span>',
+    '\u001f': '<span style="content: \'\\001f\'">␟</span>'
   }
   var default_parser=function(c)
   {
@@ -868,7 +900,7 @@ cls.SimpleJSParser.prototype = new function()
           if(__parse_error_first_token)
           {
             __line = "<div class='error-description'>" +
-                        helpers.escapeTextHtml(__parse_error_description) +
+                        helpers.escape_html(__parse_error_description) +
                         "</div>" +
                         "<span class='not-error'>" +  __line + "</span>" +
                         "<span class='first-error'>" +  __buffer + "</span>";

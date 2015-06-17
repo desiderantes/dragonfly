@@ -22,6 +22,7 @@
               inset 0 0 0 2px rgba(255, 255, 255, 0.55);
   vertical-align: middle;
   -o-transition: background-color 0.2s;
+  transition: background-color 0.2s;
 }
 
 .ui-button:not([disabled]):active
@@ -188,7 +189,6 @@ window.load_screen_timeout = window.setTimeout(function()
 <link rel="stylesheet" href="./console-logger/consolelogger_style.css"/>
 <link rel="stylesheet" href="./ui-style/colorpickerstyle.css"/>
 <link rel="stylesheet" href="./ui-scripts/sortable_table/sortable_table.css"/>
-<link rel="stylesheet" href="./ui-scripts/metadata_drawer/metadata_drawer.css"/>
 <link rel="stylesheet" href="./ui-scripts/ruler/style.css"/>
 <link rel="stylesheet" href="./repl/repl_style.css"/>
 <link rel="stylesheet" href="./resource-manager/resource_style.css"/>
@@ -203,6 +203,7 @@ window.load_screen_timeout = window.setTimeout(function()
 <link rel="stylesheet" href="./screenshot/style.css"/>
 <link rel="stylesheet" href="./profiler/profiler_style.css"/>
 <link rel="stylesheet" href="./ui-scripts/tooltip/tooltip.css"/>
+<link rel="stylesheet" href="./ui-scripts/zoomer/zoomer.css"/>
 
 
 <!-- This will turn off including of the UI strings if the exclude_uistrings var is set -->
@@ -213,6 +214,7 @@ window.load_screen_timeout = window.setTimeout(function()
 <!-- command concat_js "./script/dragonfly.js" -->
 
 <script src="./scripts/ini.js"/>
+<script src="./lib/windowobject.js"/>
 <script src="./lib/elementprototype.js"/>
 <script src="./lib/arrayprototype.js"/>
 <script src="./lib/canvasrenderingcontext2dprototype.js"/>
@@ -220,11 +222,13 @@ window.load_screen_timeout = window.setTimeout(function()
 <script src="./lib/nodelistprototype.js"/>
 <script src="./lib/objectnamespace.js"/>
 <script src="./lib/operanamespace.js"/>
+<script src="./lib/functionprototype.js"/>
 <script src="./lib/datenamespace.js"/>
 <script src="./lib/stringprototype.js"/>
 <script src="./lib/stylesheetlistprototype.js"/>
 <script src="./lib/xmlhttprequestprototype.js"/>
 <script src="./lib/storageprototype.js"/>
+<script src="./lib/dict.js"/>
 
 
 <script src="./scripts/Timeouts.js"/>
@@ -273,10 +277,12 @@ window.load_screen_timeout = window.setTimeout(function()
 <script src="./ui-scripts/defaults.js"/>
 <script src="./ui-scripts/window.js"/>
 <script src="./ui-scripts/cells.js"/>
+<script src="./ui-scripts/celloverlay.js"/>
 <script src="./ui-scripts/topCell.js"/>
 <script src="./ui-scripts/view.js"/>
 <script src="./ui-scripts/tempview.js"/>
 <script src="./ui-scripts/compositeView.js"/>
+<script src="./ui-scripts/overlayview.js"/>
 <script src="./ui-scripts/settingView.js"/>
 <script src="./ui-scripts/ui-base.js"/>
 <script src="./ui-scripts/TopUIBase.js"/>
@@ -306,6 +312,7 @@ window.load_screen_timeout = window.setTimeout(function()
 <script src="./ui-scripts/containers.js"/>
 <script src="./ui-scripts/topContainers.js"/>
 <script src="./ui-scripts/windowContainers.js"/>
+<script src="./ui-scripts/overlaybackground.js"/>
 <script src="./ui-scripts/tab.js"/>
 <script src="./ui-scripts/status.js"/>
 <script src="./ui-scripts/ui-templates.js"/>
@@ -327,11 +334,13 @@ window.load_screen_timeout = window.setTimeout(function()
 <script src="./ui-scripts/contextmenu.js"/>
 <script src="./ui-scripts/sidepanels/view.js"/>
 <script src="./ui-scripts/sidepanels/templates.js"/>
+<script src="./ui-scripts/zoomer/zoomer.js"/>
 
 <script src="./ui-scripts/fontselection/monospacefontselection.js"/>
 <script src="./ui-scripts/fontselection/templates.js"/>
 
 <script src="./ui-scripts/pixelmagnifier.js"/>
+
 
 
 <script src="./build-application/build_application.js"></script>
@@ -343,6 +352,7 @@ window.load_screen_timeout = window.setTimeout(function()
 <script src="./build-application/build_resource_manager_1_0.js"></script>
 <script src="./build-application/build_profiler_1_0.js"></script>
 <script src="./build-application/build_document_manager_1_0.js"></script>
+<script src="./build-application/build_overlay_1_0.js"></script>
 
 <script src="./debug/debug.js"/>
 <script src="./debug/po_tester.js"/>
@@ -366,6 +376,7 @@ window.load_screen_timeout = window.setTimeout(function()
 <script src="./syntaxhighlight/markup/syntax.js"/>
 <script src="./syntaxhighlight/css/tokenizer.js"/>
 <script src="./syntaxhighlight/css/syntax.js"/>
+<script src="./syntaxhighlight/http-header/tokenizer.js"/>
 
 
 
@@ -492,22 +503,17 @@ window.load_screen_timeout = window.setTimeout(function()
 
 <script src="./overlay/overlay_service.js"/>
 
-<script src="./profiler/profiler.1.0.responses.getevents.js"/>
-<script src="./profiler/profiler.1.0.responses.stopprofiler.js"/>
+<script src="./profiler/profiler.1.1.responses.getevents.js"/>
+<script src="./profiler/profiler.1.1.responses.stopprofiler.js"/>
 <script src="./profiler/profiler_service.js"/>
 <script src="./profiler/profiler_view.js"/>
 <script src="./profiler/profiler_templates.js"/>
 
 
 <script src="./resource-manager/resource_service.js"/>
-
-<script src="./resource-manager/resource_all_view.js"/>
 <script src="./resource-manager/resource_templates.js"/>
 <script src="./resource-manager/resource_util.js"/>
-<script src="./resource-manager/resource_base.js"/>
-<script src="./ui-scripts/metadata_drawer/metadata_drawer.js"/>
 <script src="./resource-manager/resource_display_broker.js"/>
-<script src="./resource-manager/opensingleresource.js"/>
 <script src="./resource-manager/resourcemanager.1.2.events.onurlload.js"/>
 <script src="./resource-manager/resourcemanager.1.0.events.onurlredirect.js"/>
 <script src="./resource-manager/resourcemanager.1.0.events.onurlfinished.js"/>
@@ -519,9 +525,12 @@ window.load_screen_timeout = window.setTimeout(function()
 <script src="./resource-manager/resourcemanager.1.0.events.onresponseheader.js"/>
 <script src="./resource-manager/resourcemanager.1.0.events.onresponsefinished.js"/>
 <script src="./resource-manager/documentmanager.1.0.events.onabouttoloaddocument.js"/>
+<script src="./resource-manager/documentmanager.1.0.responses.listdocuments.js"/>
 <script src="./resource-manager/resourcemanager.1.2.events.onurlunload.js"/>
 <script src="./resource-manager/resourcemanager.1.2.responses.getresource.js"/>
-
+<script src="./resource-manager/resource_tree_view.js"/>
+<script src="./resource-manager/resource_detail_view.js"/>
+<script src="./resource-manager/resourcemanager.1.3.responses.createrequest.js"/>
 
 <script src="./network/network_service.js"/>
 <script src="./network/network_view.js"/>
